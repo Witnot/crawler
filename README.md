@@ -1,76 +1,86 @@
-# WebScraper
-
-````markdown
-````
-#  Crawler
+# Crawler
 
 A simple concurrent web crawler written in Go.  
 It fetches pages, extracts data (headings, first paragraph, links, images), and exports results to CSV.
 
 ---
 
-##  Requirements
-- [Go 1.21+](https://go.dev/dl/)
-- Internet connection 😅
+## Requirements
+- Go 1.21 or higher
+- Internet connection
 
 ---
 
-##  Usage
+## Installation
 
-Build the binary:
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Witnot/crawler.git
+   cd crawler
+   ```
+
+2. Build the binary:
+   ```bash
+   go build -o crawler
+   ```
+
+---
+
+## Usage
+
+Run the crawler with the following syntax:
 
 ```bash
-go build -o crawler
-````
+./crawler <url> <maxConcurrency> <maxPages>
+```
 
-Run the crawler:
-
+**Example:**
 ```bash
-./crawler "https://example.com" <maxConcurrency> <maxPages>
+./crawler "https://example.com" 3 10
 ```
 
-Example:
+**Parameters:**
+- `<url>`: Starting page to crawl
+- `<maxConcurrency>`: Maximum number of concurrent requests (e.g., 3)
+- `<maxPages>`: Maximum number of pages to crawl (e.g., 10)
 
-```bash
-./crawler "https://wikipedia.org" 3 10
-```
-
-This crawls up to **10 pages**, using **3 concurrent workers**, starting from `wikipedia.org`.
-The results will be saved to `report.csv`.
+The crawler will output results to `report.csv` in the current directory.
 
 ---
 
-##  Features
+## Features
 
-* Concurrency control (limit active requests).
-* Configurable max pages to crawl.
-* Normalizes URLs to avoid duplicates.
-* Extracts:
-
-  * `<h1>` heading
-  * First `<p>` paragraph
-  * Outgoing links
-  * Images
-* Exports results to **CSV report**.
-
----
-
-##  Output
-
-The crawler generates a `report.csv` file with these columns:
-
-* `page_url`
-* `h1`
-* `first_paragraph`
-* `outgoing_link_urls`
-* `image_urls`
+- Concurrency control to limit active requests
+- Configurable maximum pages to crawl
+- Normalizes URLs to avoid duplicates
+- Extracts:
+  - `<h1>` heading
+  - First `<p>` paragraph
+  - Outgoing links
+  - Images
+- Exports results to a CSV file
 
 ---
 
-##  Notes
+## Output
 
-* Be kind to servers: don’t set concurrency too high.
-* Use `Ctrl+C` to stop crawling at any time.
+The `report.csv` file contains the following columns:
+- `page_url`
+- `h1`
+- `first_paragraph`
+- `outgoing_link_urls`
+- `image_urls`
 
+**Sample CSV output:**
+```
+page_url,h1,first_paragraph,outgoing_link_urls,image_urls
+https://example.com,Welcome to Example,"This is the first paragraph of content.","https://example.com/about,https://example.com/contact","https://example.com/logo.png,https://example.com/banner.jpg"
 ```
 
+---
+
+## Notes
+
+- Use a reasonable concurrency value to avoid overloading servers
+- Stop the crawler at any time with `Ctrl+C`
+- The crawler respects the same domain and follows links within the starting domain
